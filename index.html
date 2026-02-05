@@ -29,7 +29,6 @@
             --border-color: #334155;
         }
 
-        /* ตกแต่ง Scrollbar ให้ดู Minimal */
         .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
@@ -39,7 +38,6 @@
         .rotate-icon { transform: rotate(90deg); }
         .transition-transform { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
 
-        /* การออกแบบตารางใหม่ให้สะอาดตา */
         .custom-table { 
             width: 100%; 
             border-collapse: separate; 
@@ -67,12 +65,10 @@
             transition: background-color 0.2s;
         }
 
-        /* ระดับความลึกของแถว (Indentation) */
         .indent-1 { padding-left: 1.5rem !important; }
         .indent-2 { padding-left: 3rem !important; }
         .indent-3 { padding-left: 4.5rem !important; }
 
-        /* สถานะจุดสี */
         .status-dot {
             display: inline-block;
             width: 8px;
@@ -93,7 +89,7 @@
 
     <div class="max-w-7xl mx-auto px-4 py-8 space-y-8">
         
-        <!-- Top Bar & Branding -->
+        <!-- Header -->
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div class="space-y-1">
                 <h1 class="text-3xl font-extrabold tracking-tight text-indigo-600 dark:text-indigo-400">
@@ -127,7 +123,7 @@
             </div>
         </header>
 
-        <!-- Stats Grid (Summary) -->
+        <!-- Stats -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700/50">
                 <div class="flex items-center gap-4 mb-3">
@@ -191,8 +187,12 @@
                                     <span id="selectedMonthLabel" class="truncate font-medium">กำลังโหลด...</span>
                                     <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
                                 </div>
-                                <div id="monthMenu" class="hidden absolute left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-[60] p-3 animate-in fade-in slide-in-from-top-2 duration-200">
-                                    <input type="text" id="monthSearch" placeholder="ค้นหาเดือน..." class="w-full px-3 py-2 mb-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none focus:ring-2 focus:ring-indigo-500/20">
+                                <div id="monthMenu" class="hidden absolute left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-[60] p-3">
+                                    <input type="text" id="monthSearch" placeholder="ค้นหาเดือน..." class="w-full px-3 py-2 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none">
+                                    <div class="flex gap-2 mb-2">
+                                        <button onclick="toggleAllCheckboxes('month-item', true)" class="flex-1 text-[10px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-md hover:bg-indigo-100 transition-colors">เลือกทั้งหมด</button>
+                                        <button onclick="toggleAllCheckboxes('month-item', false)" class="flex-1 text-[10px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-md hover:bg-slate-200 transition-colors">ล้างทั้งหมด</button>
+                                    </div>
                                     <div id="monthCheckboxes" class="space-y-1 max-h-48 overflow-y-auto custom-scrollbar"></div>
                                 </div>
                             </div>
@@ -207,8 +207,31 @@
                                     <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
                                 </div>
                                 <div id="expenseMenu" class="hidden absolute left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50 p-3">
-                                    <input type="text" id="expenseSearch" placeholder="ค้นหาประเภท..." class="w-full px-3 py-2 mb-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none">
+                                    <input type="text" id="expenseSearch" placeholder="ค้นหาประเภท..." class="w-full px-3 py-2 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none">
+                                    <div class="flex gap-2 mb-2">
+                                        <button onclick="toggleAllCheckboxes('expense-item', true)" class="flex-1 text-[10px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-md hover:bg-indigo-100 transition-colors">เลือกทั้งหมด</button>
+                                        <button onclick="toggleAllCheckboxes('expense-item', false)" class="flex-1 text-[10px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-md hover:bg-slate-200 transition-colors">ล้างทั้งหมด</button>
+                                    </div>
                                     <div id="expenseCheckboxes" class="space-y-1 max-h-48 overflow-y-auto custom-scrollbar"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Filter Company -->
+                        <div class="space-y-2">
+                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">บริษัท (C)</label>
+                            <div class="relative group">
+                                <div id="companyDropdownBtn" class="w-full flex justify-between items-center px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer text-sm">
+                                    <span id="selectedCompanyLabel" class="truncate font-medium">กำลังโหลด...</span>
+                                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                                </div>
+                                <div id="companyMenu" class="hidden absolute left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50 p-3">
+                                    <input type="text" id="companySearch" placeholder="ค้นหาบริษัท..." class="w-full px-3 py-2 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none">
+                                    <div class="flex gap-2 mb-2">
+                                        <button onclick="toggleAllCheckboxes('company-item', true)" class="flex-1 text-[10px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-md hover:bg-indigo-100 transition-colors">เลือกทั้งหมด</button>
+                                        <button onclick="toggleAllCheckboxes('company-item', false)" class="flex-1 text-[10px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-md hover:bg-slate-200 transition-colors">ล้างทั้งหมด</button>
+                                    </div>
+                                    <div id="companyCheckboxes" class="space-y-1 max-h-48 overflow-y-auto custom-scrollbar"></div>
                                 </div>
                             </div>
                         </div>
@@ -235,7 +258,7 @@
                                 <i data-lucide="table-2" class="w-5 h-5 text-indigo-600"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold text-slate-800 dark:text-slate-100">ตารางวิเคราะห์ข้อมูลแยกประเภท</h3>
+                                <h3 class="font-bold text-slate-800 dark:text-slate-100">ตารางวิเคราะห์ข้อมูล</h3>
                                 <p class="text-[11px] text-slate-400">คลิกที่แถวเพื่อขยายดูข้อมูลเชิงลึก</p>
                             </div>
                         </div>
@@ -281,9 +304,11 @@
         let filteredDataGlobal = [];
         let selectedExpenseTypes = new Set();
         let selectedMonths = new Set();
+        let selectedCompanies = new Set();
         
         let allExpenseTypes = [];
         let allMonths = [];
+        let allCompanies = [];
 
         lucide.createIcons();
 
@@ -293,7 +318,6 @@
             document.getElementById('currentDateDisplay').innerText = now.toLocaleDateString('th-TH', options);
         }
 
-        // Logic Dropdown
         function setupDropdown(btnId, menuId) {
             const btn = document.getElementById(btnId);
             const menu = document.getElementById(menuId);
@@ -310,6 +334,7 @@
 
         setupDropdown('expenseTypeDropdownBtn', 'expenseMenu');
         setupDropdown('monthDropdownBtn', 'monthMenu');
+        setupDropdown('companyDropdownBtn', 'companyMenu');
 
         const parseNum = (v) => v ? parseFloat(String(v).replace(/[^\d.-]/g, '')) || 0 : 0;
 
@@ -355,17 +380,19 @@
         function processRows(rows) {
             const expenses = new Set();
             const months = new Set();
+            const companies = new Set();
             
             rawData = rows.filter(r => r[12] && String(r[12]).trim() !== "" && r[12] !== 'ประเภทค่าใช้จ่าย (M)').map(row => {
                 const expType = String(row[12] || 'อื่นๆ').trim();
                 const monthName = String(row[14] || 'ไม่ระบุ').trim();
-                const company = String(row[2] || 'ไม่ระบุบริษัท').trim();
+                const companyName = String(row[2] || 'ไม่ระบุบริษัท').trim();
                 
                 expenses.add(expType);
                 months.add(monthName);
+                companies.add(companyName);
 
                 return {
-                    company,
+                    company: companyName,
                     deliveryNo: String(row[3] || '-').trim(),
                     amount: parseNum(row[4]),
                     paid: parseNum(row[5]),
@@ -378,22 +405,63 @@
 
             allExpenseTypes = Array.from(expenses).sort((a,b)=>a.localeCompare(b,'th'));
             allMonths = Array.from(months).sort((a,b)=>a.localeCompare(b,'th'));
+            allCompanies = Array.from(companies).sort((a,b)=>a.localeCompare(b,'th'));
 
             selectedExpenseTypes = new Set(allExpenseTypes);
             selectedMonths = new Set(allMonths);
+            selectedCompanies = new Set(allCompanies);
 
             renderCheckboxes('expenseCheckboxes', allExpenseTypes, 'expense-item', selectedExpenseTypes, 'selectedExpenseLabel');
             renderCheckboxes('monthCheckboxes', allMonths, 'month-item', selectedMonths, 'selectedMonthLabel');
+            renderCheckboxes('companyCheckboxes', allCompanies, 'company-item', selectedCompanies, 'selectedCompanyLabel');
 
+            setupSearch('monthSearch', 'monthCheckboxes');
+            setupSearch('expenseSearch', 'expenseCheckboxes');
+            setupSearch('companySearch', 'companyCheckboxes');
+
+            applyFilters();
+        }
+
+        function setupSearch(inputId, containerId) {
+            const input = document.getElementById(inputId);
+            input.oninput = (e) => {
+                const term = e.target.value.toLowerCase();
+                const labels = document.querySelectorAll(`#${containerId} label`);
+                labels.forEach(l => {
+                    const text = l.innerText.toLowerCase();
+                    l.classList.toggle('hidden', !text.includes(term));
+                });
+            };
+        }
+
+        function toggleAllCheckboxes(className, state) {
+            const checkboxes = document.querySelectorAll(`.${className}`);
+            let setObj;
+            let labelId;
+
+            if (className === 'expense-item') { setObj = selectedExpenseTypes; labelId = 'selectedExpenseLabel'; }
+            else if (className === 'month-item') { setObj = selectedMonths; labelId = 'selectedMonthLabel'; }
+            else if (className === 'company-item') { setObj = selectedCompanies; labelId = 'selectedCompanyLabel'; }
+
+            checkboxes.forEach(cb => {
+                // เทคนิคคือเปลี่ยนเฉพาะตัวที่มองเห็น (ถ้ามีการ search อยู่)
+                const label = cb.closest('label');
+                if (!label.classList.contains('hidden')) {
+                    cb.checked = state;
+                    state ? setObj.add(cb.value) : setObj.delete(cb.value);
+                }
+            });
+
+            updateLabel(labelId, `.${className}`, setObj.size);
             applyFilters();
         }
 
         function renderCheckboxes(containerId, items, className, setObj, labelId) {
             const container = document.getElementById(containerId);
             container.innerHTML = items.map(item => `
-                <label class="flex items-center gap-3 p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl cursor-pointer transition-colors filter-label" data-text="${item}">
+                <label class="flex items-center gap-3 p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl cursor-pointer transition-colors filter-label">
                     <input type="checkbox" value="${item}" ${setObj.has(item) ? 'checked' : ''} class="${className} w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500/20 transition-all">
-                    <span class="text-sm text-slate-600 dark:text-slate-300 font-medium">${item}</span>
+                    <span class="text-sm text-slate-600 dark:text-slate-300 font-medium truncate">${item}</span>
                 </label>
             `).join('');
 
@@ -418,10 +486,11 @@
             filteredDataGlobal = rawData.filter(d => {
                 const matchE = selectedExpenseTypes.has(d.expenseType);
                 const matchM = selectedMonths.has(d.department);
+                const matchC = selectedCompanies.has(d.company);
                 let matchS = true;
                 if (statusFilter === 'Paid') matchS = d.balance <= 0;
                 else if (statusFilter === 'Unpaid') matchS = d.balance > 0;
-                return matchE && matchM && matchS;
+                return matchE && matchM && matchC && matchS;
             });
             updateUI();
         }
@@ -571,7 +640,6 @@
             setTimeout(() => el.classList.add('hidden'), 3500);
         }
 
-        // Event Listeners
         document.getElementById('darkModeToggle').onclick = () => {
             document.documentElement.classList.toggle('dark');
             const isDark = document.documentElement.classList.contains('dark');
