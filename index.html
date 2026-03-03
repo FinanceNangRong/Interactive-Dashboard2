@@ -21,6 +21,7 @@
             background-color: var(--bg-main);
             color: #334155;
             transition: all 0.3s ease;
+            font-size: 14px; /* ปรับขนาดพื้นฐานลงเล็กน้อย */
         }
 
         .dark {
@@ -29,7 +30,7 @@
             --border-color: #334155;
         }
 
-        .custom-scrollbar::-webkit-scrollbar { width: 5px; height: 5px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
         .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
@@ -51,195 +52,216 @@
             color: #475569;
             font-weight: 600;
             text-transform: uppercase;
-            font-size: 0.7rem;
+            font-size: 0.65rem; /* ลดขนาดหัวตาราง */
             letter-spacing: 0.05em;
-            padding: 12px 16px;
+            padding: 8px 12px; /* ลด padding */
             border-bottom: 2px solid var(--border-color);
             text-align: left;
         }
         .dark .custom-table th { background-color: #2d3748; color: #cbd5e1; }
 
         .custom-table td { 
-            padding: 10px 16px;
+            padding: 6px 12px; /* ลด padding แถวข้อมูล */
             border-bottom: 1px solid var(--border-color);
-            transition: background-color 0.2s;
+            transition: background-color 0.1s;
         }
 
-        .indent-1 { padding-left: 1.5rem !important; }
-        .indent-2 { padding-left: 3rem !important; }
-        .indent-3 { padding-left: 4.5rem !important; }
+        /* ปรับระดับความลึกให้กระชับขึ้น */
+        .indent-1 { padding-left: 1rem !important; }
+        .indent-2 { padding-left: 2rem !important; }
+        .indent-3 { padding-left: 3rem !important; }
 
         .status-dot {
             display: inline-block;
-            width: 8px;
-            height: 8px;
+            width: 6px;
+            height: 6px;
             border-radius: 50%;
             margin-right: 6px;
         }
 
         @media print {
             .no-print { display: none !important; }
-            body { background-color: white !important; }
+            body { background-color: white !important; font-size: 12px; }
             .max-w-7xl { max-width: 100% !important; }
             .row-hidden { display: table-row !important; }
+            .custom-table td, .custom-table th { padding: 4px 8px; }
         }
     </style>
 </head>
 <body class="antialiased">
 
-    <div class="max-w-7xl mx-auto px-4 py-8 space-y-8">
+    <div class="max-w-7xl mx-auto px-4 py-6 space-y-6">
         
         <!-- Header -->
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div class="space-y-1">
-                <h1 class="text-3xl font-extrabold tracking-tight text-indigo-600 dark:text-indigo-400">
-                    รายงานเจ้าหนี้ <span class="text-2xl block md:inline md:ml-2">โรงพยาบาลนางรอง</span>
+                <h1 class="text-2xl font-extrabold tracking-tight text-indigo-600 dark:text-indigo-400">
+                    รายงานเจ้าหนี้ <span class="text-xl block md:inline md:ml-2">โรงพยาบาลนางรอง</span>
                 </h1>
-                <div class="flex items-center gap-3 text-sm text-slate-500 dark:text-slate-400">
+                <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 font-medium">
                     <span class="flex items-center gap-1.5">
-                        <i data-lucide="calendar" class="w-4 h-4"></i>
+                        <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
                         <span id="currentDateDisplay"></span>
                     </span>
                     <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
                     <span class="flex items-center gap-1.5">
-                        <i data-lucide="shield-check" class="w-4 h-4"></i>
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
                         ระบบตรวจสอบภายใน
                     </span>
                 </div>
             </div>
 
             <div class="flex items-center gap-2 no-print">
-                <button id="darkModeToggle" class="p-2.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm hover:border-indigo-500 transition-all">
-                    <i data-lucide="moon" id="moonIcon" class="w-5 h-5 text-slate-600 dark:text-slate-400"></i>
-                    <i data-lucide="sun" id="sunIcon" class="w-5 h-5 text-amber-500 hidden"></i>
+                <button id="darkModeToggle" class="p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm hover:border-indigo-500 transition-all">
+                    <i data-lucide="moon" id="moonIcon" class="w-4 h-4 text-slate-600 dark:text-slate-400"></i>
+                    <i data-lucide="sun" id="sunIcon" class="w-4 h-4 text-amber-500 hidden"></i>
                 </button>
-                <button id="printReportBtn" class="flex items-center gap-2 bg-slate-900 text-white px-5 py-2.5 rounded-xl shadow-lg hover:bg-slate-800 transition-all font-medium">
-                    <i data-lucide="printer" class="w-4 h-4"></i> พิมพ์
+                <button id="printReportBtn" class="flex items-center gap-1.5 bg-slate-900 text-white px-4 py-2 rounded-xl shadow-lg hover:bg-slate-800 transition-all font-medium text-xs">
+                    <i data-lucide="printer" class="w-3.5 h-3.5"></i> พิมพ์
                 </button>
-                <label class="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl shadow-lg hover:bg-indigo-700 transition-all cursor-pointer font-medium">
-                    <i data-lucide="upload-cloud" class="w-4 h-4"></i> อัปโหลด
+                <label class="flex items-center gap-1.5 bg-indigo-600 text-white px-4 py-2 rounded-xl shadow-lg hover:bg-indigo-700 transition-all cursor-pointer font-medium text-xs">
+                    <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> อัปโหลด
                     <input type="file" id="excelInput" accept=".xlsx, .xls" class="hidden">
                 </label>
             </div>
         </header>
 
         <!-- Stats -->
-        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700/50">
-                <div class="flex items-center gap-4 mb-3">
-                    <div class="p-3 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-2xl">
-                        <i data-lucide="wallet" class="w-6 h-6"></i>
+        <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/50">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
+                        <i data-lucide="wallet" class="w-4 h-4"></i>
                     </div>
-                    <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">ยอดหนี้รวม</p>
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">ยอดหนี้รวม</p>
                 </div>
-                <h3 id="statTotal" class="text-2xl font-bold text-blue-600 dark:text-blue-400">0.00</h3>
+                <h3 id="statTotal" class="text-xl font-bold text-blue-600 dark:text-blue-400">0.00</h3>
             </div>
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700/50">
-                <div class="flex items-center gap-4 mb-3">
-                    <div class="p-3 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-2xl">
-                        <i data-lucide="check-circle" class="w-6 h-6"></i>
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/50">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg">
+                        <i data-lucide="check-circle" class="w-4 h-4"></i>
                     </div>
-                    <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">ชำระแล้ว</p>
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">ชำระแล้ว</p>
                 </div>
-                <h3 id="statPaid" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">0.00</h3>
+                <h3 id="statPaid" class="text-xl font-bold text-emerald-600 dark:text-emerald-400">0.00</h3>
             </div>
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700/50">
-                <div class="flex items-center gap-4 mb-3">
-                    <div class="p-3 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-2xl">
-                        <i data-lucide="edit-3" class="w-6 h-6"></i>
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/50">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-lg">
+                        <i data-lucide="edit-3" class="w-4 h-4"></i>
                     </div>
-                    <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">ปรับปรุง</p>
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">ปรับปรุง</p>
                 </div>
-                <h3 id="statAdjustment" class="text-2xl font-bold text-amber-500 dark:text-amber-400">0.00</h3>
+                <h3 id="statAdjustment" class="text-xl font-bold text-amber-500 dark:text-amber-400">0.00</h3>
             </div>
-            <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700/50">
-                <div class="flex items-center gap-4 mb-3">
-                    <div class="p-3 bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-2xl">
-                        <i data-lucide="alert-circle" class="w-6 h-6"></i>
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/50">
+                <div class="flex items-center gap-3 mb-2">
+                    <div class="p-2 bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-lg">
+                        <i data-lucide="alert-circle" class="w-4 h-4"></i>
                     </div>
-                    <p class="text-sm font-semibold text-slate-500 dark:text-slate-400">คงเหลือสุทธิ</p>
+                    <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">คงเหลือสุทธิ</p>
                 </div>
-                <h3 id="statBalance" class="text-2xl font-bold text-rose-600 dark:text-rose-400">0.00</h3>
+                <h3 id="statBalance" class="text-xl font-bold text-rose-600 dark:text-rose-400">0.00</h3>
             </div>
         </section>
 
         <!-- Main Content Area -->
-        <div class="grid grid-cols-1 xl:grid-cols-4 gap-8">
+        <div class="grid grid-cols-1 xl:grid-cols-4 gap-6">
             
             <!-- Filter Sidebar -->
-            <aside class="xl:col-span-1 space-y-6 no-print">
-                <div class="bg-white dark:bg-slate-800 p-6 rounded-3xl border border-slate-100 dark:border-slate-700 shadow-sm">
-                    <div class="flex items-center justify-between mb-6">
-                        <h2 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                            <i data-lucide="sliders-horizontal" class="w-4 h-4 text-indigo-500"></i> ตัวกรองข้อมูล
+            <aside class="xl:col-span-1 space-y-4 no-print">
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm">
+                    <div class="flex items-center justify-between mb-4">
+                        <h2 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 text-xs">
+                            <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-indigo-500"></i> ตัวกรองข้อมูล
                         </h2>
-                        <button id="syncCloudBtn" class="p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors" title="รีเฟรชข้อมูล">
-                            <i data-lucide="refresh-cw" id="syncIcon" class="w-4 h-4 text-slate-400"></i>
+                        <button id="syncCloudBtn" class="p-1.5 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors" title="รีเฟรชข้อมูล">
+                            <i data-lucide="refresh-cw" id="syncIcon" class="w-3.5 h-3.5 text-slate-400"></i>
                         </button>
                     </div>
 
-                    <div class="space-y-6">
+                    <div class="space-y-4">
                         <!-- Filter Month -->
-                        <div class="space-y-2">
-                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">เลือกเดือน (O)</label>
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">เลือกเดือน (O)</label>
                             <div class="relative group">
-                                <div id="monthDropdownBtn" class="w-full flex justify-between items-center px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer text-sm">
+                                <div id="monthDropdownBtn" class="w-full flex justify-between items-center px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer text-xs">
                                     <span id="selectedMonthLabel" class="truncate font-medium">กำลังโหลด...</span>
-                                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                                    <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
                                 </div>
-                                <div id="monthMenu" class="hidden absolute left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-[60] p-3">
-                                    <input type="text" id="monthSearch" placeholder="ค้นหาเดือน..." class="w-full px-3 py-2 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none">
-                                    <div class="flex gap-2 mb-2">
-                                        <button onclick="toggleAllCheckboxes('month-item', true)" class="flex-1 text-[10px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-md hover:bg-indigo-100 transition-colors">เลือกทั้งหมด</button>
-                                        <button onclick="toggleAllCheckboxes('month-item', false)" class="flex-1 text-[10px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-md hover:bg-slate-200 transition-colors">ล้างทั้งหมด</button>
+                                <div id="monthMenu" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl z-[60] p-2">
+                                    <input type="text" id="monthSearch" placeholder="ค้นหา..." class="w-full px-2 py-1.5 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none">
+                                    <div class="flex gap-1.5 mb-2">
+                                        <button onclick="toggleAllCheckboxes('month-item', true)" class="flex-1 text-[9px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded hover:bg-indigo-100 transition-colors">ทั้งหมด</button>
+                                        <button onclick="toggleAllCheckboxes('month-item', false)" class="flex-1 text-[9px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 rounded hover:bg-slate-200 transition-colors">ล้าง</button>
                                     </div>
-                                    <div id="monthCheckboxes" class="space-y-1 max-h-48 overflow-y-auto custom-scrollbar"></div>
+                                    <div id="monthCheckboxes" class="space-y-0.5 max-h-40 overflow-y-auto custom-scrollbar"></div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Filter Type -->
-                        <div class="space-y-2">
-                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">ประเภทค่าใช้จ่าย (M)</label>
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">ประเภทค่าใช้จ่าย (M)</label>
                             <div class="relative group">
-                                <div id="expenseTypeDropdownBtn" class="w-full flex justify-between items-center px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer text-sm">
+                                <div id="expenseTypeDropdownBtn" class="w-full flex justify-between items-center px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer text-xs">
                                     <span id="selectedExpenseLabel" class="truncate font-medium">กำลังโหลด...</span>
-                                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                                    <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
                                 </div>
-                                <div id="expenseMenu" class="hidden absolute left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50 p-3">
-                                    <input type="text" id="expenseSearch" placeholder="ค้นหาประเภท..." class="w-full px-3 py-2 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none">
-                                    <div class="flex gap-2 mb-2">
-                                        <button onclick="toggleAllCheckboxes('expense-item', true)" class="flex-1 text-[10px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-md hover:bg-indigo-100 transition-colors">เลือกทั้งหมด</button>
-                                        <button onclick="toggleAllCheckboxes('expense-item', false)" class="flex-1 text-[10px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-md hover:bg-slate-200 transition-colors">ล้างทั้งหมด</button>
+                                <div id="expenseMenu" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl z-50 p-2">
+                                    <input type="text" id="expenseSearch" placeholder="ค้นหา..." class="w-full px-2 py-1.5 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none">
+                                    <div class="flex gap-1.5 mb-2">
+                                        <button onclick="toggleAllCheckboxes('expense-item', true)" class="flex-1 text-[9px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded">ทั้งหมด</button>
+                                        <button onclick="toggleAllCheckboxes('expense-item', false)" class="flex-1 text-[9px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 rounded">ล้าง</button>
                                     </div>
-                                    <div id="expenseCheckboxes" class="space-y-1 max-h-48 overflow-y-auto custom-scrollbar"></div>
+                                    <div id="expenseCheckboxes" class="space-y-0.5 max-h-40 overflow-y-auto custom-scrollbar"></div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Filter Company -->
-                        <div class="space-y-2">
-                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">บริษัท (C)</label>
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">บริษัท (C)</label>
                             <div class="relative group">
-                                <div id="companyDropdownBtn" class="w-full flex justify-between items-center px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer text-sm">
+                                <div id="companyDropdownBtn" class="w-full flex justify-between items-center px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer text-xs">
                                     <span id="selectedCompanyLabel" class="truncate font-medium">กำลังโหลด...</span>
-                                    <i data-lucide="chevron-down" class="w-4 h-4 text-slate-400"></i>
+                                    <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
                                 </div>
-                                <div id="companyMenu" class="hidden absolute left-0 right-0 mt-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-2xl shadow-2xl z-50 p-3">
-                                    <input type="text" id="companySearch" placeholder="ค้นหาบริษัท..." class="w-full px-3 py-2 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-sm outline-none">
-                                    <div class="flex gap-2 mb-2">
-                                        <button onclick="toggleAllCheckboxes('company-item', true)" class="flex-1 text-[10px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded-md hover:bg-indigo-100 transition-colors">เลือกทั้งหมด</button>
-                                        <button onclick="toggleAllCheckboxes('company-item', false)" class="flex-1 text-[10px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-md hover:bg-slate-200 transition-colors">ล้างทั้งหมด</button>
+                                <div id="companyMenu" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl z-50 p-2">
+                                    <input type="text" id="companySearch" placeholder="ค้นหา..." class="w-full px-2 py-1.5 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none">
+                                    <div class="flex gap-1.5 mb-2">
+                                        <button onclick="toggleAllCheckboxes('company-item', true)" class="flex-1 text-[9px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded">ทั้งหมด</button>
+                                        <button onclick="toggleAllCheckboxes('company-item', false)" class="flex-1 text-[9px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 rounded">ล้าง</button>
                                     </div>
-                                    <div id="companyCheckboxes" class="space-y-1 max-h-48 overflow-y-auto custom-scrollbar"></div>
+                                    <div id="companyCheckboxes" class="space-y-0.5 max-h-40 overflow-y-auto custom-scrollbar"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Filter Payment Date -->
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">วันที่ชำระเงิน</label>
+                            <div class="relative group">
+                                <div id="paymentDateDropdownBtn" class="w-full flex justify-between items-center px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer text-xs">
+                                    <span id="selectedPaymentDateLabel" class="truncate font-medium">กำลังโหลด...</span>
+                                    <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
+                                </div>
+                                <div id="paymentDateMenu" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl z-50 p-2">
+                                    <input type="text" id="paymentDateSearch" placeholder="ค้นหา..." class="w-full px-2 py-1.5 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none">
+                                    <div class="flex gap-1.5 mb-2">
+                                        <button onclick="toggleAllCheckboxes('payment-date-item', true)" class="flex-1 text-[9px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded">ทั้งหมด</button>
+                                        <button onclick="toggleAllCheckboxes('payment-date-item', false)" class="flex-1 text-[9px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 rounded">ล้าง</button>
+                                    </div>
+                                    <div id="paymentDateCheckboxes" class="space-y-0.5 max-h-40 overflow-y-auto custom-scrollbar"></div>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Filter Status -->
-                        <div class="space-y-2">
-                            <label class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">สถานะการชำระ (H)</label>
-                            <select id="filterStatus" class="w-full px-4 py-3 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl text-sm outline-none focus:ring-2 focus:ring-indigo-500/20 font-medium">
+                        <div class="space-y-1.5">
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">สถานะการชำระ (H)</label>
+                            <select id="filterStatus" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-1 focus:ring-indigo-500/20 font-medium">
                                 <option value="All">ทุกสถานะ</option>
                                 <option value="Paid">ชำระครบแล้ว</option>
                                 <option value="Unpaid">ยังมียอดค้างชำระ</option>
@@ -251,20 +273,20 @@
 
             <!-- Table Section -->
             <main class="xl:col-span-3">
-                <div class="bg-white dark:bg-slate-800 rounded-3xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
-                    <div class="p-6 border-b border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                        <div class="flex items-center gap-3">
-                            <div class="w-10 h-10 bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center rounded-xl">
-                                <i data-lucide="table-2" class="w-5 h-5 text-indigo-600"></i>
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
+                    <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center rounded-lg">
+                                <i data-lucide="table-2" class="w-4 h-4 text-indigo-600"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold text-slate-800 dark:text-slate-100">ตารางวิเคราะห์ข้อมูล</h3>
-                                <p class="text-[11px] text-slate-400">คลิกที่แถวเพื่อขยายดูข้อมูลเชิงลึก</p>
+                                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">ตารางวิเคราะห์ข้อมูล</h3>
+                                <p class="text-[10px] text-slate-400">คลิกที่แถวเพื่อขยายดูข้อมูลเชิงลึก</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="overflow-x-auto custom-scrollbar">
+                    <div class="overflow-x-auto custom-scrollbar max-h-[70vh]">
                         <table class="custom-table" id="reportTable">
                             <thead>
                                 <tr>
@@ -275,18 +297,18 @@
                                     <th class="text-right">คงเหลือ (H)</th>
                                 </tr>
                             </thead>
-                            <tbody id="dataTableBody" class="text-sm">
+                            <tbody id="dataTableBody" class="text-[13px]"> <!-- ปรับขนาดตัวอักษรลงจาก text-sm -->
                                 <tr>
-                                    <td colspan="5" class="py-20 text-center text-slate-400 italic">
-                                        <div class="flex flex-col items-center gap-3">
-                                            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-500"></div>
+                                    <td colspan="5" class="py-16 text-center text-slate-400 italic">
+                                        <div class="flex flex-col items-center gap-2">
+                                            <div class="animate-spin rounded-full h-6 w-6 border-b-2 border-indigo-500"></div>
                                             กำลังประมวลผลข้อมูล...
                                         </div>
                                     </td>
                                 </tr>
                             </tbody>
                             <tfoot>
-                                <tr id="detailTableFooter" class="bg-slate-50/50 dark:bg-slate-900/50 font-bold"></tr>
+                                <tr id="detailTableFooter" class="bg-slate-50/50 dark:bg-slate-900/50 font-bold text-[13px]"></tr>
                             </tfoot>
                         </table>
                     </div>
@@ -296,7 +318,7 @@
     </div>
 
     <!-- Notification Toast -->
-    <div id="statusMsg" class="hidden fixed bottom-8 right-8 p-4 rounded-2xl shadow-2xl z-[100] min-w-[280px] animate-in slide-in-from-bottom-10"></div>
+    <div id="statusMsg" class="hidden fixed bottom-6 right-6 p-3 rounded-xl shadow-xl z-[100] min-w-[200px] animate-in slide-in-from-bottom-5"></div>
 
     <script>
         // State Management
@@ -305,10 +327,12 @@
         let selectedExpenseTypes = new Set();
         let selectedMonths = new Set();
         let selectedCompanies = new Set();
+        let selectedPaymentDates = new Set(); 
         
         let allExpenseTypes = [];
         let allMonths = [];
         let allCompanies = [];
+        let allPaymentDates = [];
 
         lucide.createIcons();
 
@@ -335,6 +359,7 @@
         setupDropdown('expenseTypeDropdownBtn', 'expenseMenu');
         setupDropdown('monthDropdownBtn', 'monthMenu');
         setupDropdown('companyDropdownBtn', 'companyMenu');
+        setupDropdown('paymentDateDropdownBtn', 'paymentDateMenu');
 
         const parseNum = (v) => v ? parseFloat(String(v).replace(/[^\d.-]/g, '')) || 0 : 0;
 
@@ -381,15 +406,18 @@
             const expenses = new Set();
             const months = new Set();
             const companies = new Set();
+            const paymentDates = new Set(); 
             
             rawData = rows.filter(r => r[12] && String(r[12]).trim() !== "" && r[12] !== 'ประเภทค่าใช้จ่าย (M)').map(row => {
                 const expType = String(row[12] || 'อื่นๆ').trim();
                 const monthName = String(row[14] || 'ไม่ระบุ').trim();
                 const companyName = String(row[2] || 'ไม่ระบุบริษัท').trim();
+                const payDate = String(row[8] || '-').trim(); 
                 
                 expenses.add(expType);
                 months.add(monthName);
                 companies.add(companyName);
+                paymentDates.add(payDate);
 
                 return {
                     company: companyName,
@@ -399,25 +427,30 @@
                     adjustment: parseNum(row[6]),
                     balance: parseNum(row[7]),
                     expenseType: expType,
-                    department: monthName
+                    department: monthName,
+                    paymentDate: payDate 
                 };
             });
 
             allExpenseTypes = Array.from(expenses).sort((a,b)=>a.localeCompare(b,'th'));
             allMonths = Array.from(months).sort((a,b)=>a.localeCompare(b,'th'));
             allCompanies = Array.from(companies).sort((a,b)=>a.localeCompare(b,'th'));
+            allPaymentDates = Array.from(paymentDates).sort((a,b)=>a.localeCompare(b,'th')); 
 
             selectedExpenseTypes = new Set(allExpenseTypes);
             selectedMonths = new Set(allMonths);
             selectedCompanies = new Set(allCompanies);
+            selectedPaymentDates = new Set(allPaymentDates); 
 
             renderCheckboxes('expenseCheckboxes', allExpenseTypes, 'expense-item', selectedExpenseTypes, 'selectedExpenseLabel');
             renderCheckboxes('monthCheckboxes', allMonths, 'month-item', selectedMonths, 'selectedMonthLabel');
             renderCheckboxes('companyCheckboxes', allCompanies, 'company-item', selectedCompanies, 'selectedCompanyLabel');
+            renderCheckboxes('paymentDateCheckboxes', allPaymentDates, 'payment-date-item', selectedPaymentDates, 'selectedPaymentDateLabel'); 
 
             setupSearch('monthSearch', 'monthCheckboxes');
             setupSearch('expenseSearch', 'expenseCheckboxes');
             setupSearch('companySearch', 'companyCheckboxes');
+            setupSearch('paymentDateSearch', 'paymentDateCheckboxes');
 
             applyFilters();
         }
@@ -442,9 +475,9 @@
             if (className === 'expense-item') { setObj = selectedExpenseTypes; labelId = 'selectedExpenseLabel'; }
             else if (className === 'month-item') { setObj = selectedMonths; labelId = 'selectedMonthLabel'; }
             else if (className === 'company-item') { setObj = selectedCompanies; labelId = 'selectedCompanyLabel'; }
+            else if (className === 'payment-date-item') { setObj = selectedPaymentDates; labelId = 'selectedPaymentDateLabel'; }
 
             checkboxes.forEach(cb => {
-                // เทคนิคคือเปลี่ยนเฉพาะตัวที่มองเห็น (ถ้ามีการ search อยู่)
                 const label = cb.closest('label');
                 if (!label.classList.contains('hidden')) {
                     cb.checked = state;
@@ -459,9 +492,9 @@
         function renderCheckboxes(containerId, items, className, setObj, labelId) {
             const container = document.getElementById(containerId);
             container.innerHTML = items.map(item => `
-                <label class="flex items-center gap-3 p-2 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-xl cursor-pointer transition-colors filter-label">
-                    <input type="checkbox" value="${item}" ${setObj.has(item) ? 'checked' : ''} class="${className} w-4 h-4 rounded border-slate-300 text-indigo-600 focus:ring-indigo-500/20 transition-all">
-                    <span class="text-sm text-slate-600 dark:text-slate-300 font-medium truncate">${item}</span>
+                <label class="flex items-center gap-2 px-1.5 py-1 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg cursor-pointer transition-colors filter-label">
+                    <input type="checkbox" value="${item}" ${setObj.has(item) ? 'checked' : ''} class="${className} w-3.5 h-3.5 rounded border-slate-300 text-indigo-600 focus:ring-0">
+                    <span class="text-[11px] text-slate-600 dark:text-slate-300 font-medium truncate">${item}</span>
                 </label>
             `).join('');
 
@@ -478,7 +511,7 @@
             const total = document.querySelectorAll(selector).length;
             if (count === 0) label.innerText = "ไม่ได้เลือก";
             else if (count === total) label.innerText = "แสดงทั้งหมด";
-            else label.innerText = `เลือกแล้ว ${count} รายการ`;
+            else label.innerText = `${count} รายการ`;
         }
 
         function applyFilters() {
@@ -487,10 +520,11 @@
                 const matchE = selectedExpenseTypes.has(d.expenseType);
                 const matchM = selectedMonths.has(d.department);
                 const matchC = selectedCompanies.has(d.company);
+                const matchP = selectedPaymentDates.has(d.paymentDate); 
                 let matchS = true;
                 if (statusFilter === 'Paid') matchS = d.balance <= 0;
                 else if (statusFilter === 'Unpaid') matchS = d.balance > 0;
-                return matchE && matchM && matchC && matchS;
+                return matchE && matchM && matchC && matchP && matchS;
             });
             updateUI();
         }
@@ -549,7 +583,7 @@
                 tRow.onclick = () => toggleRow(tId);
                 tRow.innerHTML = `
                     <td class="flex items-center gap-2">
-                        <i data-lucide="chevron-right" id="icon-${tId}" class="w-4 h-4 transition-transform text-indigo-500"></i> ${type}
+                        <i data-lucide="chevron-right" id="icon-${tId}" class="w-3.5 h-3.5 transition-transform text-indigo-500"></i> ${type}
                     </td>
                     <td class="text-right text-blue-600 dark:text-blue-400">${format(tData.e)}</td>
                     <td class="text-right text-emerald-600 dark:text-emerald-400">${format(tData.f)}</td>
@@ -566,7 +600,7 @@
                     mRow.onclick = (e) => { e.stopPropagation(); toggleRow(mId); };
                     mRow.innerHTML = `
                         <td class="indent-1 flex items-center gap-2">
-                            <i data-lucide="chevron-right" id="icon-${mId}" class="w-3.5 h-3.5 transition-transform text-slate-400"></i>
+                            <i data-lucide="chevron-right" id="icon-${mId}" class="w-3 h-3 transition-transform text-slate-400"></i>
                             <span class="w-1.5 h-1.5 rounded-full bg-blue-400"></span> ${month}
                         </td>
                         <td class="text-right text-blue-500">${format(mData.e)}</td>
@@ -583,9 +617,9 @@
                         cRow.className = `parent-${mId} parent-${tId} row-hidden cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-700/50`;
                         cRow.onclick = (e) => { e.stopPropagation(); toggleRow(cId); };
                         cRow.innerHTML = `
-                            <td class="indent-2 flex items-center gap-2 text-slate-500 dark:text-slate-400">
-                                <i data-lucide="chevron-right" id="icon-${cId}" class="w-3 h-3 transition-transform"></i>
-                                <i data-lucide="building" class="w-3.5 h-3.5"></i> ${company}
+                            <td class="indent-2 flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs">
+                                <i data-lucide="chevron-right" id="icon-${cId}" class="w-2.5 h-2.5 transition-transform"></i>
+                                <i data-lucide="building" class="w-3 h-3"></i> ${company}
                             </td>
                             <td class="text-right text-blue-500/80">${format(cData.e)}</td>
                             <td class="text-right text-emerald-500/80">${format(cData.f)}</td>
@@ -597,7 +631,7 @@
                         cData.invoices.forEach(inv => {
                             const invRow = document.createElement('tr');
                             const statusColor = inv.balance <= 0 ? 'bg-emerald-500' : 'bg-rose-500';
-                            invRow.className = `parent-${cId} parent-${mId} parent-${tId} row-hidden bg-slate-50/20 dark:bg-slate-900/20 text-[12px] italic text-slate-400`;
+                            invRow.className = `parent-${cId} parent-${mId} parent-${tId} row-hidden bg-slate-50/20 dark:bg-slate-900/20 text-[11px] italic text-slate-400`;
                             invRow.innerHTML = `
                                 <td class="indent-3 flex items-center">
                                     <span class="status-dot ${statusColor}"></span> ${inv.deliveryNo}
@@ -614,7 +648,7 @@
             });
 
             document.getElementById('detailTableFooter').innerHTML = `
-                <td class="p-4">รวมสุทธิ</td>
+                <td class="p-3">รวมสุทธิ</td>
                 <td class="text-right text-blue-600">${format(totals.e)}</td>
                 <td class="text-right text-emerald-600">${format(totals.f)}</td>
                 <td class="text-right text-amber-500">${format(totals.g)}</td>
@@ -629,15 +663,15 @@
             const color = t === 'success' ? 'bg-emerald-600' : 'bg-rose-600';
             
             el.innerHTML = `
-                <div class="flex items-center gap-3">
-                    <div class="p-2 bg-white/20 rounded-lg"><i data-lucide="${icon}" class="w-5 h-5 text-white"></i></div>
-                    <span class="font-medium text-white">${m}</span>
+                <div class="flex items-center gap-2">
+                    <div class="p-1.5 bg-white/20 rounded-lg"><i data-lucide="${icon}" class="w-3.5 h-3.5 text-white"></i></div>
+                    <span class="font-medium text-white text-xs">${m}</span>
                 </div>
             `;
-            el.className = `fixed bottom-8 right-8 p-4 rounded-2xl shadow-2xl z-[100] block ${color} animate-in slide-in-from-right-10`;
+            el.className = `fixed bottom-6 right-6 p-2 rounded-xl shadow-xl z-[100] block ${color} animate-in slide-in-from-right-10`;
             el.classList.remove('hidden');
             lucide.createIcons();
-            setTimeout(() => el.classList.add('hidden'), 3500);
+            setTimeout(() => el.classList.add('hidden'), 2500);
         }
 
         document.getElementById('darkModeToggle').onclick = () => {
