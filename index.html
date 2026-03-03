@@ -13,7 +13,7 @@
         :root {
             --bg-main: #f8fafc;
             --card-bg: #ffffff;
-            --border-color: #e2e8f0;
+            --border-color: #000000; /* กำหนดเส้นขอบเป็นสีดำ */
         }
 
         body { 
@@ -21,52 +21,55 @@
             background-color: var(--bg-main);
             color: #334155;
             transition: all 0.3s ease;
-            font-size: 14px; /* ปรับขนาดพื้นฐานลงเล็กน้อย */
+            font-size: 14px; 
         }
 
         .dark {
             --bg-main: #0f172a;
             --card-bg: #1e293b;
-            --border-color: #334155;
+            --border-color: #ffffff; /* ในโหมดมืดใช้สีขาวเพื่อให้เห็นเส้นชัด */
         }
 
         .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
-        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
-        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #475569; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #000000; border-radius: 10px; }
+        .dark .custom-scrollbar::-webkit-scrollbar-thumb { background: #ffffff; }
 
         .row-hidden { display: none; }
         .rotate-icon { transform: rotate(90deg); }
         .transition-transform { transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
 
+        /* ตารางที่นำเส้นแถวออก แต่เหลือเส้นขอบนอก */
         .custom-table { 
             width: 100%; 
-            border-collapse: separate; 
-            border-spacing: 0;
+            border-collapse: collapse; 
             background-color: #ffffff;
+            border: 1.5px solid var(--border-color); /* เส้นขอบนอก */
         }
-        .dark .custom-table { background-color: #1e293b; }
+        .dark .custom-table { background-color: #1e293b; border-color: #ffffff; }
 
         .custom-table th { 
             background-color: #f1f5f9;
-            color: #475569;
-            font-weight: 600;
+            color: #475569; 
+            font-weight: 700;
             text-transform: uppercase;
-            font-size: 0.65rem; /* ลดขนาดหัวตาราง */
+            font-size: 0.65rem; 
             letter-spacing: 0.05em;
-            padding: 8px 12px; /* ลด padding */
-            border-bottom: 2px solid var(--border-color);
+            padding: 8px 12px; 
+            border-bottom: 1.5px solid var(--border-color); /* เส้นขอบล่างหัวตารางเพื่อแยกส่วน */
             text-align: left;
+            position: sticky;
+            top: 0;
+            z-index: 20;
         }
-        .dark .custom-table th { background-color: #2d3748; color: #cbd5e1; }
+        .dark .custom-table th { background-color: #2d3748; color: #cbd5e1; border-color: #ffffff; }
 
         .custom-table td { 
-            padding: 6px 12px; /* ลด padding แถวข้อมูล */
-            border-bottom: 1px solid var(--border-color);
+            padding: 6px 12px; 
+            border: none; /* นำเส้นแถวและเส้นแบ่งคอลัมน์ออก */
             transition: background-color 0.1s;
         }
 
-        /* ปรับระดับความลึกให้กระชับขึ้น */
         .indent-1 { padding-left: 1rem !important; }
         .indent-2 { padding-left: 2rem !important; }
         .indent-3 { padding-left: 3rem !important; }
@@ -77,6 +80,15 @@
             height: 6px;
             border-radius: 50%;
             margin-right: 6px;
+            border: 0.5px solid #000000;
+        }
+
+        /* กล่องสถิติและ sidebar ที่มีเส้นขอบดำ */
+        .bordered-card {
+            border: 1px solid #000000 !important;
+        }
+        .dark .bordered-card {
+            border-color: #ffffff !important;
         }
 
         @media print {
@@ -84,7 +96,8 @@
             body { background-color: white !important; font-size: 12px; }
             .max-w-7xl { max-width: 100% !important; }
             .row-hidden { display: table-row !important; }
-            .custom-table td, .custom-table th { padding: 4px 8px; }
+            .custom-table { border: 1.5px solid black !important; }
+            .custom-table th { border-bottom: 1.5px solid black !important; }
         }
     </style>
 </head>
@@ -96,30 +109,30 @@
         <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
             <div class="space-y-1">
                 <h1 class="text-2xl font-extrabold tracking-tight text-indigo-600 dark:text-indigo-400">
-                    รายงานเจ้าหนี้ <span class="text-xl block md:inline md:ml-2">โรงพยาบาลนางรอง</span>
+                    รายงานเจ้าหนี้ <span class="text-xl block md:inline md:ml-2 text-slate-800 dark:text-slate-100">โรงพยาบาลนางรอง</span>
                 </h1>
                 <div class="flex items-center gap-3 text-xs text-slate-500 dark:text-slate-400 font-medium">
                     <span class="flex items-center gap-1.5">
-                        <i data-lucide="calendar" class="w-3.5 h-3.5"></i>
+                        <i data-lucide="calendar" class="w-3.5 h-3.5 text-indigo-600"></i>
                         <span id="currentDateDisplay"></span>
                     </span>
                     <span class="w-1 h-1 bg-slate-300 rounded-full"></span>
                     <span class="flex items-center gap-1.5">
-                        <i data-lucide="shield-check" class="w-3.5 h-3.5"></i>
+                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-emerald-600"></i>
                         ระบบตรวจสอบภายใน
                     </span>
                 </div>
             </div>
 
             <div class="flex items-center gap-2 no-print">
-                <button id="darkModeToggle" class="p-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-sm hover:border-indigo-500 transition-all">
+                <button id="darkModeToggle" class="p-2 bg-white dark:bg-slate-800 border border-black dark:border-white rounded-xl shadow-sm hover:border-indigo-500 transition-all">
                     <i data-lucide="moon" id="moonIcon" class="w-4 h-4 text-slate-600 dark:text-slate-400"></i>
                     <i data-lucide="sun" id="sunIcon" class="w-4 h-4 text-amber-500 hidden"></i>
                 </button>
-                <button id="printReportBtn" class="flex items-center gap-1.5 bg-slate-900 text-white px-4 py-2 rounded-xl shadow-lg hover:bg-slate-800 transition-all font-medium text-xs">
+                <button id="printReportBtn" class="flex items-center gap-1.5 bg-slate-900 text-white px-4 py-2 rounded-xl shadow-lg hover:bg-slate-800 transition-all font-medium text-xs border border-black">
                     <i data-lucide="printer" class="w-3.5 h-3.5"></i> พิมพ์
                 </button>
-                <label class="flex items-center gap-1.5 bg-indigo-600 text-white px-4 py-2 rounded-xl shadow-lg hover:bg-indigo-700 transition-all cursor-pointer font-medium text-xs">
+                <label class="flex items-center gap-1.5 bg-indigo-600 text-white px-4 py-2 rounded-xl shadow-lg hover:bg-indigo-700 transition-all cursor-pointer font-medium text-xs border border-indigo-800">
                     <i data-lucide="upload-cloud" class="w-3.5 h-3.5"></i> อัปโหลด
                     <input type="file" id="excelInput" accept=".xlsx, .xls" class="hidden">
                 </label>
@@ -128,36 +141,36 @@
 
         <!-- Stats -->
         <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/50">
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm bordered-card">
                 <div class="flex items-center gap-3 mb-2">
-                    <div class="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg">
+                    <div class="p-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg border border-black dark:border-white">
                         <i data-lucide="wallet" class="w-4 h-4"></i>
                     </div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">ยอดหนี้รวม</p>
                 </div>
                 <h3 id="statTotal" class="text-xl font-bold text-blue-600 dark:text-blue-400">0.00</h3>
             </div>
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/50">
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm bordered-card">
                 <div class="flex items-center gap-3 mb-2">
-                    <div class="p-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg">
+                    <div class="p-2 bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400 rounded-lg border border-black dark:border-white">
                         <i data-lucide="check-circle" class="w-4 h-4"></i>
                     </div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">ชำระแล้ว</p>
                 </div>
                 <h3 id="statPaid" class="text-xl font-bold text-emerald-600 dark:text-emerald-400">0.00</h3>
             </div>
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/50">
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm bordered-card">
                 <div class="flex items-center gap-3 mb-2">
-                    <div class="p-2 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-lg">
+                    <div class="p-2 bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400 rounded-lg border border-black dark:border-white">
                         <i data-lucide="edit-3" class="w-4 h-4"></i>
                     </div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">ปรับปรุง</p>
                 </div>
                 <h3 id="statAdjustment" class="text-xl font-bold text-amber-500 dark:text-amber-400">0.00</h3>
             </div>
-            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700/50">
+            <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl shadow-sm bordered-card">
                 <div class="flex items-center gap-3 mb-2">
-                    <div class="p-2 bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-lg">
+                    <div class="p-2 bg-rose-50 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400 rounded-lg border border-black dark:border-white">
                         <i data-lucide="alert-circle" class="w-4 h-4"></i>
                     </div>
                     <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">คงเหลือสุทธิ</p>
@@ -171,12 +184,12 @@
             
             <!-- Filter Sidebar -->
             <aside class="xl:col-span-1 space-y-4 no-print">
-                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm">
+                <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl bordered-card shadow-sm">
                     <div class="flex items-center justify-between mb-4">
                         <h2 class="font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2 text-xs">
                             <i data-lucide="sliders-horizontal" class="w-3.5 h-3.5 text-indigo-500"></i> ตัวกรองข้อมูล
                         </h2>
-                        <button id="syncCloudBtn" class="p-1.5 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg transition-colors" title="รีเฟรชข้อมูล">
+                        <button id="syncCloudBtn" class="p-1.5 border border-black rounded-lg hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors" title="รีเฟรชข้อมูล">
                             <i data-lucide="refresh-cw" id="syncIcon" class="w-3.5 h-3.5 text-slate-400"></i>
                         </button>
                     </div>
@@ -186,15 +199,15 @@
                         <div class="space-y-1.5">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">เลือกเดือน (O)</label>
                             <div class="relative group">
-                                <div id="monthDropdownBtn" class="w-full flex justify-between items-center px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer text-xs">
-                                    <span id="selectedMonthLabel" class="truncate font-medium">กำลังโหลด...</span>
+                                <div id="monthDropdownBtn" class="w-full flex justify-between items-center px-3 py-2 bg-white dark:bg-slate-900 border border-black rounded-xl cursor-pointer text-xs font-bold">
+                                    <span id="selectedMonthLabel" class="truncate">กำลังโหลด...</span>
                                     <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
                                 </div>
-                                <div id="monthMenu" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl z-[60] p-2">
-                                    <input type="text" id="monthSearch" placeholder="ค้นหา..." class="w-full px-2 py-1.5 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none">
+                                <div id="monthMenu" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border-2 border-black rounded-xl shadow-2xl z-[60] p-2">
+                                    <input type="text" id="monthSearch" placeholder="ค้นหา..." class="w-full px-2 py-1.5 mb-2 bg-white dark:bg-slate-900 border border-black rounded-lg text-xs outline-none">
                                     <div class="flex gap-1.5 mb-2">
-                                        <button onclick="toggleAllCheckboxes('month-item', true)" class="flex-1 text-[9px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded hover:bg-indigo-100 transition-colors">ทั้งหมด</button>
-                                        <button onclick="toggleAllCheckboxes('month-item', false)" class="flex-1 text-[9px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 rounded hover:bg-slate-200 transition-colors">ล้าง</button>
+                                        <button onclick="toggleAllCheckboxes('month-item', true)" class="flex-1 text-[9px] py-1 border border-black font-bold rounded hover:bg-black hover:text-white transition-colors">ทั้งหมด</button>
+                                        <button onclick="toggleAllCheckboxes('month-item', false)" class="flex-1 text-[9px] py-1 border border-black font-bold rounded hover:bg-black hover:text-white transition-colors">ล้าง</button>
                                     </div>
                                     <div id="monthCheckboxes" class="space-y-0.5 max-h-40 overflow-y-auto custom-scrollbar"></div>
                                 </div>
@@ -205,15 +218,15 @@
                         <div class="space-y-1.5">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">ประเภทค่าใช้จ่าย (M)</label>
                             <div class="relative group">
-                                <div id="expenseTypeDropdownBtn" class="w-full flex justify-between items-center px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer text-xs">
-                                    <span id="selectedExpenseLabel" class="truncate font-medium">กำลังโหลด...</span>
+                                <div id="expenseTypeDropdownBtn" class="w-full flex justify-between items-center px-3 py-2 bg-white dark:bg-slate-900 border border-black rounded-xl cursor-pointer text-xs font-bold">
+                                    <span id="selectedExpenseLabel" class="truncate">กำลังโหลด...</span>
                                     <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
                                 </div>
-                                <div id="expenseMenu" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl z-50 p-2">
-                                    <input type="text" id="expenseSearch" placeholder="ค้นหา..." class="w-full px-2 py-1.5 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none">
+                                <div id="expenseMenu" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border-2 border-black rounded-xl shadow-2xl z-50 p-2">
+                                    <input type="text" id="expenseSearch" placeholder="ค้นหา..." class="w-full px-2 py-1.5 mb-2 bg-white dark:bg-slate-900 border border-black rounded-lg text-xs outline-none">
                                     <div class="flex gap-1.5 mb-2">
-                                        <button onclick="toggleAllCheckboxes('expense-item', true)" class="flex-1 text-[9px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded">ทั้งหมด</button>
-                                        <button onclick="toggleAllCheckboxes('expense-item', false)" class="flex-1 text-[9px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 rounded">ล้าง</button>
+                                        <button onclick="toggleAllCheckboxes('expense-item', true)" class="flex-1 text-[9px] py-1 border border-black font-bold rounded hover:bg-black hover:text-white transition-colors">ทั้งหมด</button>
+                                        <button onclick="toggleAllCheckboxes('expense-item', false)" class="flex-1 text-[9px] py-1 border border-black font-bold rounded hover:bg-black hover:text-white transition-colors">ล้าง</button>
                                     </div>
                                     <div id="expenseCheckboxes" class="space-y-0.5 max-h-40 overflow-y-auto custom-scrollbar"></div>
                                 </div>
@@ -224,15 +237,15 @@
                         <div class="space-y-1.5">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">บริษัท (C)</label>
                             <div class="relative group">
-                                <div id="companyDropdownBtn" class="w-full flex justify-between items-center px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer text-xs">
-                                    <span id="selectedCompanyLabel" class="truncate font-medium">กำลังโหลด...</span>
+                                <div id="companyDropdownBtn" class="w-full flex justify-between items-center px-3 py-2 bg-white dark:bg-slate-900 border border-black rounded-xl cursor-pointer text-xs font-bold">
+                                    <span id="selectedCompanyLabel" class="truncate">กำลังโหลด...</span>
                                     <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
                                 </div>
-                                <div id="companyMenu" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl z-50 p-2">
-                                    <input type="text" id="companySearch" placeholder="ค้นหา..." class="w-full px-2 py-1.5 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none">
+                                <div id="companyMenu" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border-2 border-black rounded-xl shadow-2xl z-50 p-2">
+                                    <input type="text" id="companySearch" placeholder="ค้นหา..." class="w-full px-2 py-1.5 mb-2 bg-white dark:bg-slate-900 border border-black rounded-lg text-xs outline-none">
                                     <div class="flex gap-1.5 mb-2">
-                                        <button onclick="toggleAllCheckboxes('company-item', true)" class="flex-1 text-[9px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded">ทั้งหมด</button>
-                                        <button onclick="toggleAllCheckboxes('company-item', false)" class="flex-1 text-[9px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 rounded">ล้าง</button>
+                                        <button onclick="toggleAllCheckboxes('company-item', true)" class="flex-1 text-[9px] py-1 border border-black font-bold rounded hover:bg-black hover:text-white transition-colors">ทั้งหมด</button>
+                                        <button onclick="toggleAllCheckboxes('company-item', false)" class="flex-1 text-[9px] py-1 border border-black font-bold rounded hover:bg-black hover:text-white transition-colors">ล้าง</button>
                                     </div>
                                     <div id="companyCheckboxes" class="space-y-0.5 max-h-40 overflow-y-auto custom-scrollbar"></div>
                                 </div>
@@ -243,15 +256,15 @@
                         <div class="space-y-1.5">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">วันที่ชำระเงิน</label>
                             <div class="relative group">
-                                <div id="paymentDateDropdownBtn" class="w-full flex justify-between items-center px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl cursor-pointer text-xs">
-                                    <span id="selectedPaymentDateLabel" class="truncate font-medium">กำลังโหลด...</span>
+                                <div id="paymentDateDropdownBtn" class="w-full flex justify-between items-center px-3 py-2 bg-white dark:bg-slate-900 border border-black rounded-xl cursor-pointer text-xs font-bold">
+                                    <span id="selectedPaymentDateLabel" class="truncate">กำลังโหลด...</span>
                                     <i data-lucide="chevron-down" class="w-3 h-3 text-slate-400"></i>
                                 </div>
-                                <div id="paymentDateMenu" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl z-50 p-2">
-                                    <input type="text" id="paymentDateSearch" placeholder="ค้นหา..." class="w-full px-2 py-1.5 mb-2 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-lg text-xs outline-none">
+                                <div id="paymentDateMenu" class="hidden absolute left-0 right-0 mt-1 bg-white dark:bg-slate-800 border-2 border-black rounded-xl shadow-2xl z-50 p-2">
+                                    <input type="text" id="paymentDateSearch" placeholder="ค้นหา..." class="w-full px-2 py-1.5 mb-2 bg-white dark:bg-slate-900 border border-black rounded-lg text-xs outline-none">
                                     <div class="flex gap-1.5 mb-2">
-                                        <button onclick="toggleAllCheckboxes('payment-date-item', true)" class="flex-1 text-[9px] py-1 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400 rounded">ทั้งหมด</button>
-                                        <button onclick="toggleAllCheckboxes('payment-date-item', false)" class="flex-1 text-[9px] py-1 bg-slate-100 dark:bg-slate-700 text-slate-500 rounded">ล้าง</button>
+                                        <button onclick="toggleAllCheckboxes('payment-date-item', true)" class="flex-1 text-[9px] py-1 border border-black font-bold rounded hover:bg-black hover:text-white transition-colors">ทั้งหมด</button>
+                                        <button onclick="toggleAllCheckboxes('payment-date-item', false)" class="flex-1 text-[9px] py-1 border border-black font-bold rounded hover:bg-black hover:text-white transition-colors">ล้าง</button>
                                     </div>
                                     <div id="paymentDateCheckboxes" class="space-y-0.5 max-h-40 overflow-y-auto custom-scrollbar"></div>
                                 </div>
@@ -261,7 +274,7 @@
                         <!-- Filter Status -->
                         <div class="space-y-1.5">
                             <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">สถานะการชำระ (H)</label>
-                            <select id="filterStatus" class="w-full px-3 py-2 bg-slate-50 dark:bg-slate-900/50 border border-slate-200 dark:border-slate-700 rounded-xl text-xs outline-none focus:ring-1 focus:ring-indigo-500/20 font-medium">
+                            <select id="filterStatus" class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-black rounded-xl text-xs font-bold outline-none focus:bg-black focus:text-white transition-colors text-black dark:text-white">
                                 <option value="All">ทุกสถานะ</option>
                                 <option value="Paid">ชำระครบแล้ว</option>
                                 <option value="Unpaid">ยังมียอดค้างชำระ</option>
@@ -273,31 +286,32 @@
 
             <!-- Table Section -->
             <main class="xl:col-span-3">
-                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-700 overflow-hidden">
-                    <div class="p-4 border-b border-slate-100 dark:border-slate-700 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div class="bg-white dark:bg-slate-800 rounded-2xl shadow-sm bordered-card overflow-hidden flex flex-col">
+                    <div class="p-4 border-b border-black dark:border-white flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-slate-50 dark:bg-slate-800">
                         <div class="flex items-center gap-2">
-                            <div class="w-8 h-8 bg-indigo-50 dark:bg-indigo-900/30 flex items-center justify-center rounded-lg">
-                                <i data-lucide="table-2" class="w-4 h-4 text-indigo-600"></i>
+                            <div class="w-8 h-8 bg-white dark:bg-slate-700 border border-black dark:border-white flex items-center justify-center rounded-lg">
+                                <i data-lucide="table-2" class="w-4 h-4 text-black dark:text-white"></i>
                             </div>
                             <div>
-                                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">ตารางวิเคราะห์ข้อมูล</h3>
-                                <p class="text-[10px] text-slate-400">คลิกที่แถวเพื่อขยายดูข้อมูลเชิงลึก</p>
+                                <h3 class="font-bold text-slate-800 dark:text-slate-100 text-sm">รายงานเจ้าหนี้ แยกประเภท</h3>
+                                <p class="text-[10px] text-slate-400 font-medium">ข้อมูลถูกตรึงหัวข้อไว้เพื่อความสะดวก</p>
                             </div>
                         </div>
                     </div>
 
-                    <div class="overflow-x-auto custom-scrollbar max-h-[70vh]">
+                    <!-- พื้นที่ตารางที่มีการจำกัดความสูงและทำ Sticky -->
+                    <div class="overflow-x-auto custom-scrollbar max-h-[70vh] relative">
                         <table class="custom-table" id="reportTable">
                             <thead>
                                 <tr>
-                                    <th>ประเภท</th>
-                                    <th class="text-right">ยอดรวม (E)</th>
-                                    <th class="text-right">จ่ายแล้ว (F)</th>
-                                    <th class="text-right">ปรับปรุง (G)</th>
-                                    <th class="text-right">คงเหลือ (H)</th>
+                                    <th class="whitespace-nowrap">ประเภท</th>
+                                    <th class="text-right whitespace-nowrap">ยอดรวม (E)</th>
+                                    <th class="text-right whitespace-nowrap">จ่ายแล้ว (F)</th>
+                                    <th class="text-right whitespace-nowrap">ปรับปรุง (G)</th>
+                                    <th class="text-right whitespace-nowrap">คงเหลือ (H)</th>
                                 </tr>
                             </thead>
-                            <tbody id="dataTableBody" class="text-[13px]"> <!-- ปรับขนาดตัวอักษรลงจาก text-sm -->
+                            <tbody id="dataTableBody" class="text-[13px] font-bold">
                                 <tr>
                                     <td colspan="5" class="py-16 text-center text-slate-400 italic">
                                         <div class="flex flex-col items-center gap-2">
@@ -307,8 +321,8 @@
                                     </td>
                                 </tr>
                             </tbody>
-                            <tfoot>
-                                <tr id="detailTableFooter" class="bg-slate-50/50 dark:bg-slate-900/50 font-bold text-[13px]"></tr>
+                            <tfoot id="detailTableFooter" class="sticky bottom-0 z-10 bg-slate-100 dark:bg-slate-900 border-t-2 border-black">
+                                <!-- ฟลูตเตอร์จะถูกอัปเดตจาก JS -->
                             </tfoot>
                         </table>
                     </div>
@@ -318,10 +332,9 @@
     </div>
 
     <!-- Notification Toast -->
-    <div id="statusMsg" class="hidden fixed bottom-6 right-6 p-3 rounded-xl shadow-xl z-[100] min-w-[200px] animate-in slide-in-from-bottom-5"></div>
+    <div id="statusMsg" class="hidden fixed bottom-6 right-6 p-3 rounded-xl shadow-xl z-[100] min-w-[200px] border-2 border-white animate-in slide-in-from-bottom-5"></div>
 
     <script>
-        // State Management
         let rawData = [];
         let filteredDataGlobal = [];
         let selectedExpenseTypes = new Set();
@@ -492,9 +505,9 @@
         function renderCheckboxes(containerId, items, className, setObj, labelId) {
             const container = document.getElementById(containerId);
             container.innerHTML = items.map(item => `
-                <label class="flex items-center gap-2 px-1.5 py-1 hover:bg-slate-50 dark:hover:bg-slate-700 rounded-lg cursor-pointer transition-colors filter-label">
-                    <input type="checkbox" value="${item}" ${setObj.has(item) ? 'checked' : ''} class="${className} w-3.5 h-3.5 rounded border-slate-300 text-indigo-600 focus:ring-0">
-                    <span class="text-[11px] text-slate-600 dark:text-slate-300 font-medium truncate">${item}</span>
+                <label class="flex items-center gap-2 px-1.5 py-1 border border-transparent hover:border-black rounded-lg cursor-pointer transition-colors filter-label">
+                    <input type="checkbox" value="${item}" ${setObj.has(item) ? 'checked' : ''} class="${className} w-3.5 h-3.5 rounded border-black text-black focus:ring-0">
+                    <span class="text-[11px] font-bold truncate text-slate-700 dark:text-slate-200">${item}</span>
                 </label>
             `).join('');
 
@@ -585,10 +598,10 @@
                     <td class="flex items-center gap-2">
                         <i data-lucide="chevron-right" id="icon-${tId}" class="w-3.5 h-3.5 transition-transform text-indigo-500"></i> ${type}
                     </td>
-                    <td class="text-right text-blue-600 dark:text-blue-400">${format(tData.e)}</td>
-                    <td class="text-right text-emerald-600 dark:text-emerald-400">${format(tData.f)}</td>
-                    <td class="text-right text-amber-500 dark:text-amber-400">${format(tData.g)}</td>
-                    <td class="text-right text-rose-600 dark:text-rose-400">${format(tData.h)}</td>
+                    <td class="text-right text-blue-600 dark:text-blue-400 font-bold">${format(tData.e)}</td>
+                    <td class="text-right text-emerald-600 dark:text-emerald-400 font-bold">${format(tData.f)}</td>
+                    <td class="text-right text-amber-500 dark:text-amber-400 font-bold">${format(tData.g)}</td>
+                    <td class="text-right text-rose-600 dark:text-rose-400 font-bold">${format(tData.h)}</td>
                 `;
                 tbody.appendChild(tRow);
 
@@ -619,7 +632,7 @@
                         cRow.innerHTML = `
                             <td class="indent-2 flex items-center gap-2 text-slate-500 dark:text-slate-400 text-xs">
                                 <i data-lucide="chevron-right" id="icon-${cId}" class="w-2.5 h-2.5 transition-transform"></i>
-                                <i data-lucide="building" class="w-3 h-3"></i> ${company}
+                                <i data-lucide="building" class="w-3 h-3 text-slate-400"></i> ${company}
                             </td>
                             <td class="text-right text-blue-500/80">${format(cData.e)}</td>
                             <td class="text-right text-emerald-500/80">${format(cData.f)}</td>
@@ -648,11 +661,13 @@
             });
 
             document.getElementById('detailTableFooter').innerHTML = `
-                <td class="p-3">รวมสุทธิ</td>
-                <td class="text-right text-blue-600">${format(totals.e)}</td>
-                <td class="text-right text-emerald-600">${format(totals.f)}</td>
-                <td class="text-right text-amber-500">${format(totals.g)}</td>
-                <td class="text-right text-rose-600">${format(totals.h)}</td>
+                <tr class="bg-slate-100 dark:bg-slate-900 font-bold text-[13px] border-t-2 border-black sticky bottom-0 z-20">
+                    <td class="p-3">รวมสุทธิ</td>
+                    <td class="text-right text-blue-600">${format(totals.e)}</td>
+                    <td class="text-right text-emerald-600">${format(totals.f)}</td>
+                    <td class="text-right text-amber-500">${format(totals.g)}</td>
+                    <td class="text-right text-rose-600">${format(totals.h)}</td>
+                </tr>
             `;
             lucide.createIcons();
         }
@@ -660,15 +675,15 @@
         function showStatus(m, t) {
             const el = document.getElementById('statusMsg');
             const icon = t === 'success' ? 'check-circle' : 'alert-circle';
-            const color = t === 'success' ? 'bg-emerald-600' : 'bg-rose-600';
+            const color = t === 'success' ? 'bg-black text-white' : 'bg-red-600 text-white';
             
             el.innerHTML = `
                 <div class="flex items-center gap-2">
-                    <div class="p-1.5 bg-white/20 rounded-lg"><i data-lucide="${icon}" class="w-3.5 h-3.5 text-white"></i></div>
-                    <span class="font-medium text-white text-xs">${m}</span>
+                    <div class="p-1.5 bg-white text-black rounded-lg"><i data-lucide="${icon}" class="w-3.5 h-3.5"></i></div>
+                    <span class="font-bold text-white text-xs">${m}</span>
                 </div>
             `;
-            el.className = `fixed bottom-6 right-6 p-2 rounded-xl shadow-xl z-[100] block ${color} animate-in slide-in-from-right-10`;
+            el.className = `fixed bottom-6 right-6 p-2 rounded-xl shadow-xl z-[100] block ${color} border-2 border-white animate-in slide-in-from-right-10`;
             el.classList.remove('hidden');
             lucide.createIcons();
             setTimeout(() => el.classList.add('hidden'), 2500);
