@@ -273,11 +273,13 @@
 
                         <!-- Filter Status -->
                         <div class="space-y-1.5">
-                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">สถานะการชำระ (H)</label>
+                            <label class="text-[10px] font-bold text-slate-400 uppercase tracking-wider">สถานะการชำระ (W)</label>
                             <select id="filterStatus" class="w-full px-3 py-2 bg-white dark:bg-slate-900 border border-black rounded-xl text-xs font-bold outline-none focus:bg-black focus:text-white transition-colors text-black dark:text-white">
                                 <option value="All">ทุกสถานะ</option>
-                                <option value="Paid">ชำระครบแล้ว</option>
-                                <option value="Unpaid">ยังมียอดค้างชำระ</option>
+                                <option value="Empty">มีหนี้ในระบบการเงิน</option>
+                                <option value="HasDoc">มีเอกสาร</option>
+                                <option value="Processing">กำลังดำเนินการจ่าย</option>
+                                <option value="PaidText">ชำระแล้ว</option>
                             </select>
                         </div>
                     </div>
@@ -380,7 +382,8 @@
             const icon = document.getElementById('syncIcon');
             if(icon) icon.classList.add('animate-spin');
             try {
-                const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vSFdX-ihIPt_qLmJz_6gYvOoP7Ql1d4ffu3BQgJBu9omjgRmmoX_w0_K00m_vvXHA/pub?output=csv";
+                // เปลี่ยน URL เป็นอันใหม่และแปลงจากรูปแบบ pubhtml เป็น pub?output=csv เพื่อดึงข้อมูล CSV ได้โดยตรง
+                const SHEET_CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT-vY0-Ic04efRHyFptGVLR3UCipBUBhJiFSCWl_3RDAbQP6cUdQaz53D_1Sru3rg/pub?output=csv";
                 const response = await fetch(`${SHEET_CSV_URL}&t=${new Date().getTime()}`);
                 const csvText = await response.text();
                 const rows = csvText.split(/\r?\n/).map(line => {
@@ -426,6 +429,7 @@
                 const monthName = String(row[14] || 'ไม่ระบุ').trim();
                 const companyName = String(row[2] || 'ไม่ระบุบริษัท').trim();
                 const payDate = String(row[8] || '-').trim(); 
+                const paymentStatusText = String(row[22] || '').trim(); // ดึงข้อมูลคอลัมน์ W
                 
                 expenses.add(expType);
                 months.add(monthName);
@@ -441,7 +445,8 @@
                     balance: parseNum(row[7]),
                     expenseType: expType,
                     department: monthName,
-                    paymentDate: payDate 
+                    paymentDate: payDate,
+                    paymentStatusText: paymentStatusText
                 };
             });
 
@@ -535,8 +540,12 @@
                 const matchC = selectedCompanies.has(d.company);
                 const matchP = selectedPaymentDates.has(d.paymentDate); 
                 let matchS = true;
-                if (statusFilter === 'Paid') matchS = d.balance <= 0;
-                else if (statusFilter === 'Unpaid') matchS = d.balance > 0;
+
+                if (statusFilter === 'Empty') matchS = d.paymentStatusText === '';
+                else if (statusFilter === 'HasDoc') matchS = d.paymentStatusText === 'มีเอกสาร';
+                else if (statusFilter === 'Processing') matchS = d.paymentStatusText === 'กำลังดำเนินการจ่าย';
+                else if (statusFilter === 'PaidText') matchS = d.paymentStatusText === 'ชำระแล้ว';
+
                 return matchE && matchM && matchC && matchP && matchS;
             });
             updateUI();
